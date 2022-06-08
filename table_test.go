@@ -34,7 +34,7 @@ var uncoloredStyles = Styles{
 }
 
 func TestModel_View(t *testing.T) {
-	model := New([]string{"  ID", "EMAIL", "USERNAME", "CREATED-AT"}, 0, 5)
+	model := New(SimpleColumns{"  ID", "EMAIL", "USERNAME", "CREATED-AT"}, 0, 5)
 	model.Styles = uncoloredStyles
 	model.SetRows([]Row{
 		prefixedRow{"1", "john@example.org", "john", "2022-02-21T18:02:29.762Z"},
@@ -52,7 +52,7 @@ func TestModel_View(t *testing.T) {
 }
 
 func TestModel_Movements(t *testing.T) {
-	model := New([]string{"  #"}, 0, 4)
+	model := New(SimpleColumns{"  #"}, 0, 4)
 	model.Styles = uncoloredStyles
 	rows := make([]Row, 10)
 	for i := 0; i < 10; i++ {
@@ -223,7 +223,7 @@ func TestModel_Movements(t *testing.T) {
 }
 
 func TestModel_SetSize(t *testing.T) {
-	model := New([]string{"  #"}, 0, 4)
+	model := New(SimpleColumns{"  #"}, 0, 4)
 	model.Styles = uncoloredStyles
 	rows := make([]Row, 10)
 	for i := 0; i < 10; i++ {
@@ -262,7 +262,7 @@ func TestModel_SetSize(t *testing.T) {
 }
 
 func TestModel_SelectedRow(t *testing.T) {
-	model := New([]string{"  #"}, 0, 4)
+	model := New(SimpleColumns{"  #"}, 0, 4)
 	rows := make([]Row, 10)
 	for i := 0; i < 10; i++ {
 		rows[i] = SimpleRow{i}
@@ -309,7 +309,7 @@ func TestModel_Update(t *testing.T) {
 	}
 	for _, tc := range tt {
 		t.Run(tc.msg.String(), func(t *testing.T) {
-			model := New([]string{"  #"}, 0, 4)
+			model := New(SimpleColumns{"  #"}, 0, 4)
 			rows := make([]Row, 10)
 			for i := 0; i < 10; i++ {
 				rows[i] = SimpleRow{i}

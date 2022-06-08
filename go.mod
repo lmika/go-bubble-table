@@ -1,4 +1,4 @@
-module github.com/calyptia/go-bubble-table
+module github.com/lmika/go-bubble-table
 
 go 1.18
 

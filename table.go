@@ -41,15 +41,35 @@ func (row SimpleRow) Render(w io.Writer, model Model, index int) {
 	fmt.Fprintln(w, s)
 }
 
+// Columns model.
+type Columns interface {
+	// Len return the number of columns within the model.
+	Len() int
+
+	// Header returns the header text for the column with the given index.
+	Header(index int) string
+}
+
+// SimpleColumns is a column model backed by a slice
+type SimpleColumns []string
+
+func (sc SimpleColumns) Len() int {
+	return len(sc)
+}
+
+func (sc SimpleColumns) Header(index int) string {
+	return sc[index]
+}
+
 // New model.
-func New(cols []string, width, height int) Model {
+func New(cols Columns, width, height int) Model {
 	vp := viewport.New(width, maxInt(height-1, 0))
 	tw := &tabwriter.Writer{}
 	return Model{
 		KeyMap:    DefaultKeyMap(),
 		Styles:    DefaultStyles(),
 		cols:      cols,
-		header:    strings.Join(cols, " "), // simple initial header view without tabwriter.
+		header:    joinColumnHeaders(cols, ' '), // simple initial header view without tabwriter.
 		viewPort:  vp,
 		tabWriter: tw,
 	}
@@ -66,7 +86,7 @@ func maxInt(a, b int) int {
 type Model struct {
 	KeyMap       KeyMap
 	Styles       Styles
-	cols         []string
+	cols         Columns
 	rows         []Row
 	header       string
 	viewPort     viewport.Model
@@ -174,8 +194,7 @@ func (m *Model) updateView() {
 	var b strings.Builder
 	m.tabWriter.Init(&b, 0, 4, 1, ' ', 0)
 
-	// rendering the header.
-	fmt.Fprintln(m.tabWriter, m.Styles.Title.Render(strings.Join(m.cols, "\t")))
+	fmt.Fprintln(m.tabWriter, m.Styles.Title.Render(joinColumnHeaders(m.cols, '\t')))
 
 	// rendering the rows.
 	for i, row := range m.rows {
@@ -408,4 +427,15 @@ func trucateOffset(s string, offset uint) string {
 		}
 	}
 	return buf.String()
+}
+
+func joinColumnHeaders(cols Columns, separator rune) string {
+	var colStr strings.Builder
+	for i := 0; i < cols.Len(); i++ {
+		if i > 0 {
+			colStr.WriteRune(separator)
+		}
+		colStr.WriteString(cols.Header(i))
+	}
+	return colStr.String()
 }
