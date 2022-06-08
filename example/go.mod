@@ -1,8 +1,8 @@
-module github.com/calyptia/go-bubble-table/example
+module github.com/lmika/go-bubble-table/example
 
 go 1.18
 
-replace github.com/calyptia/go-bubble-table => ../
+replace github.com/lmika/go-bubble-table => ../
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.16.0
