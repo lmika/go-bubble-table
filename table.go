@@ -235,6 +235,11 @@ func (m Model) CursorIsPastBottom() bool {
 	return m.cursor > len(m.rows)-1
 }
 
+// UpdateView forces an update of the view.
+func (m *Model) UpdateView() {
+	m.updateView()
+}
+
 // GoUp moves the selection to the previous row.
 // It can not go above the first row.
 func (m *Model) GoUp() {
